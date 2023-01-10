@@ -5,10 +5,10 @@ map<CoolingType,Limit> CoolingInfo = {{PASSIVE_COOLING,{PASSIVE_COOLING_LOWER_LI
                                       {HI_ACTIVE_COOLING,{HI_ACTIVE_COOLING_LOWER_LIMIT,HI_ACTIVE_COOLING_UPPER_LIMIT}}};
 
 
-map<AlertTarget,alertMedium> AlertInfo = {{TO_CONTROLLER,&sendToController},
+map<AlertTarget,alertMedium> sendAlert = {{TO_CONTROLLER,&sendToController},
                                           {TO_EMAIL,&sendToEmail}};
 
-map<BreachType,string> messageForBreachType = {{TOO_LOW,"Hi, the temperature is too low\n"},
+map<BreachType,string> getMessageForBreachType = {{TOO_LOW,"Hi, the temperature is too low\n"},
                                               {TOO_HIGH,"Hi, the temperature is too high\n"}};
 
 
@@ -34,7 +34,7 @@ BreachType classifyTemperatureBreach(CoolingType coolingType, double temperature
 void checkAndAlert(AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) {
 
   BreachType breachType = classifyTemperatureBreach(batteryChar.coolingType, temperatureInC);
-  AlertInfo[alertTarget](breachType);
+  sendAlert[alertTarget](breachType);
  
 }
 
@@ -46,6 +46,6 @@ void sendToController(BreachType breachType) {
 void sendToEmail(BreachType breachType) {
   const char* recepient = "a.b@c.com";
   printf("To: %s\n", recepient);  
-  printf(messageForBreachType[breachType].c_str());
+  printf(getMessageForBreachType[breachType].c_str());
 }
   
