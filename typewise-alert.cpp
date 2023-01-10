@@ -1,7 +1,13 @@
 #include "typewise-alert.h"
 #include <stdio.h>
 #include <iostream>
+#include <map>
 using namespace std;
+
+map<CoolingType,Limit> CoolingInfo = {{PASSIVE_COOLING,{0,35}},{MED_ACTIVE_COOLING,{0,40}},{HI_ACTIVE_COOLING,{0,45}}};
+typedef void (*alertMedium)(BreachType);
+map<AlertTarget,alertMedium> AlertInfo = {{TO_CONTROLLER,&sendToController},{TO_EMAIL,&sendToEmail}};
+
 BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
   if(value < lowerLimit) {
     return TOO_LOW;
@@ -29,7 +35,7 @@ void checkAndAlert(
     batteryChar.coolingType, temperatureInC
   );
   
-  AlertInfo[alertTarget];
+  AlertInfo[alertTarget](breachType);
  
 }
 
