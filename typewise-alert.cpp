@@ -1,6 +1,7 @@
 #include "typewise-alert.h"
 #include <stdio.h>
-
+#include <iostream>
+using namespace std;
 BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
   if(value < lowerLimit) {
     return TOO_LOW;
@@ -9,26 +10,15 @@ BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
     return TOO_HIGH;
   }
   return NORMAL;
+
 }
+
+
 
 BreachType classifyTemperatureBreach(
     CoolingType coolingType, double temperatureInC) {
-  int lowerLimit = 0;
-  int upperLimit = 0;
-  switch(coolingType) {
-    case PASSIVE_COOLING:
-      lowerLimit = 0;
-      upperLimit = 35;
-      break;
-    case HI_ACTIVE_COOLING:
-      lowerLimit = 0;
-      upperLimit = 45;
-      break;
-    case MED_ACTIVE_COOLING:
-      lowerLimit = 0;
-      upperLimit = 40;
-      break;
-  }
+  int lowerLimit = CoolingInfo[coolingType].lowerLimit;
+  int upperLimit = CoolingInfo[coolingType].upperLimit;
   return inferBreach(temperatureInC, lowerLimit, upperLimit);
 }
 
@@ -38,15 +28,9 @@ void checkAndAlert(
   BreachType breachType = classifyTemperatureBreach(
     batteryChar.coolingType, temperatureInC
   );
-
-  switch(alertTarget) {
-    case TO_CONTROLLER:
-      sendToController(breachType);
-      break;
-    case TO_EMAIL:
-      sendToEmail(breachType);
-      break;
-  }
+  
+  AlertInfo[alertTarget];
+ 
 }
 
 void sendToController(BreachType breachType) {
