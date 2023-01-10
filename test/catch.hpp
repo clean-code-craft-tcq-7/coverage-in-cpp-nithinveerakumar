@@ -8037,7 +8037,8 @@ namespace Catch {
 #elif defined ( CATCH_CONFIG_POSIX_SIGNALS )
 
 #include <signal.h>
-
+#undef MINSIGSTKSZ
+#define MINSIGSTKSZ 16384
 namespace Catch {
 
     struct FatalConditionHandler {
