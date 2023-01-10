@@ -1,13 +1,6 @@
 #include "typewise-alert.h"
-#include <stdio.h>
-#include <iostream>
-#include <map>
-using namespace std;
 
-map<CoolingType,Limit> CoolingInfo = {{PASSIVE_COOLING,{0,35}},{MED_ACTIVE_COOLING,{0,40}},{HI_ACTIVE_COOLING,{0,45}}};
-typedef void (*alertMedium)(BreachType);
-map<AlertTarget,alertMedium> AlertInfo = {{TO_CONTROLLER,&sendToController},{TO_EMAIL,&sendToEmail}};
-map<BreachType,string> messageForBreachType= {{TOO_LOW,"Hi, the temperature is too low\n"},{TOO_HIGH,"Hi, the temperature is too high\n"}};
+
 
 BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
   if(value < lowerLimit) {
@@ -22,20 +15,15 @@ BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
 
 
 
-BreachType classifyTemperatureBreach(
-    CoolingType coolingType, double temperatureInC) {
+BreachType classifyTemperatureBreach(CoolingType coolingType, double temperatureInC) {
   int lowerLimit = CoolingInfo[coolingType].lowerLimit;
   int upperLimit = CoolingInfo[coolingType].upperLimit;
   return inferBreach(temperatureInC, lowerLimit, upperLimit);
 }
 
-void checkAndAlert(
-    AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) {
+void checkAndAlert(AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) {
 
-  BreachType breachType = classifyTemperatureBreach(
-    batteryChar.coolingType, temperatureInC
-  );
-  
+  BreachType breachType = classifyTemperatureBreach(batteryChar.coolingType, temperatureInC);
   AlertInfo[alertTarget](breachType);
  
 }
