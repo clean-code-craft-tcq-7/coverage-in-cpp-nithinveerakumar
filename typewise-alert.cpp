@@ -1,5 +1,15 @@
 #include "typewise-alert.h"
 
+CoolingInfo = {{PASSIVE_COOLING,{PASSIVE_COOLING_LOWER_LIMIT,PASSIVE_COOLING_UPPER_LIMIT}},
+                                      {MED_ACTIVE_COOLING,{MED_ACTIVE_COOLING_LOWER_LIMIT,MED_ACTIVE_COOLING_UPPER_LIMIT}},
+                                      {HI_ACTIVE_COOLING,{HI_ACTIVE_COOLING_LOWER_LIMIT,HI_ACTIVE_COOLING_UPPER_LIMIT}}};
+
+
+AlertInfo = {{TO_CONTROLLER,&sendToController},
+                                          {TO_EMAIL,&sendToEmail}};
+
+messageForBreachType= {{TOO_LOW,"Hi, the temperature is too low\n"},
+                                              {TOO_HIGH,"Hi, the temperature is too high\n"}};
 
 
 BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
